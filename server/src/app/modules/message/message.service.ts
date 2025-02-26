@@ -13,7 +13,7 @@ const getMessages = async (roomId: string) => {
 };
 
 
-const createMessage = async (data: any, roomId: number, userId: string) => {
+const createMessage = async (data: any, roomId: string, userId: number) => {
   const messageData = {
     text: data.text,
     roomId: Number(roomId),

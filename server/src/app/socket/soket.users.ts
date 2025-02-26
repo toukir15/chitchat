@@ -9,12 +9,12 @@ interface ActiveUser {
 export const activeUsers: ActiveUser[] = [];
 
 // Find user function
-export const getFindUser = (userId: string) => {
+export const getFindUser = (userId: number) => {
   return activeUsers.find((user) => user.id === userId);
 };
 
 export const users = (socket: Socket) => {
-  socket.on("user", (id: Omit<ActiveUser, "socketId">) => {
+  socket.on("user", (id: number) => {
     activeUsers.forEach((user, index) => {
       if (user.id === id) {
         activeUsers.splice(index, 1);
@@ -22,11 +22,13 @@ export const users = (socket: Socket) => {
     });
 
     activeUsers.push({ id, socketId: socket.id });
-    console.log(activeUsers)
-    activeUsers.map(user => socket.to(user?.socketId as string).emit("online", activeUsers))
+
+    console.log(activeUsers);
+
     socket.emit("online", activeUsers);
     socket.broadcast.emit("online", activeUsers);
   });
+
 
   socket.on("disconnect", () => {
     const index = activeUsers.findIndex((user) => user.socketId === socket.id);

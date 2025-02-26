@@ -3,7 +3,7 @@ import prisma from "../../../shared/prisma";
 
 const createRoom = async (req: Request) => {
 
-  const data = {
+  const data: { name: string, roomImage: any } = {
     name: req.body.roomData.name,
     roomImage: req.file?.path
   }
@@ -31,7 +31,7 @@ const createRoom = async (req: Request) => {
   return transaction;
 };
 
-const joinRoom = async (roomId: string, userId: string) => {
+const joinRoom = async (roomId: string, userId: number) => {
   await prisma.roomUser.findFirstOrThrow({
     where: {
       AND: [
