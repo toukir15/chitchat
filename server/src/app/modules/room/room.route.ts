@@ -10,7 +10,6 @@ router.get(
   RoomController.getRooms
 );
 
-
 router.post(
   "/",
   multerUpload.single("file"),

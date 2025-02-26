@@ -48,20 +48,37 @@ const joinRoom = async (roomId: string, userId: string) => {
 };
 
 const getRooms = async (userId: number) => {
+  if (!userId) return;
 
   const findRoomUsers = await prisma.roomUser.findMany({
-    where: {
-      userId
-    }
-  })
-  const roomIds = findRoomUsers.map(room => room.roomId)
+    where: { userId }
+  });
+
+  const roomIds = findRoomUsers.map(room => room.roomId);
+
   const result = await prisma.room.findMany({
     where: {
       id: { in: roomIds }
+    },
+    orderBy: {
+      createdAt: "desc"
     }
-  })
-  return result
+  });
+
+  const findRoomUser = await Promise.all(
+    result.map(async (room) => {
+      const findUsers = await prisma.roomUser.findMany({
+        where: { roomId: room.id }
+      });
+      const users = findUsers.map(user => user.userId);
+      return { ...room, users };
+    })
+  );
+
+  return findRoomUser;
 };
+
+
 
 export const RoomServices = {
   createRoom,

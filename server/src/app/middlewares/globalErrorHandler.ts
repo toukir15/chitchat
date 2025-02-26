@@ -19,11 +19,6 @@ const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFun
             error = err.meta;
         }
     }
-    console.log({
-        success,
-        message,
-        error
-    })
     res.status(statusCode).json({
         success,
         message,

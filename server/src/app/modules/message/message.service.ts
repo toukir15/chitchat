@@ -1,7 +1,6 @@
 import prisma from "../../../shared/prisma";
 
 const getMessages = async (roomId: string) => {
-  console.log(roomId)
   const result = await prisma.message.findMany({
     where: {
       roomId: Number(roomId)

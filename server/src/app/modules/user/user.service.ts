@@ -15,7 +15,6 @@ const createUser = async (req: MulterRequest) => {
     password: hashedPassword,
     profilePhoto: req.file.path
   }
-  console.log(userData)
   const result = prisma.user.create({
     data: userData
   })
