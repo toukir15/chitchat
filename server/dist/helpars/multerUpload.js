@@ -11,7 +11,7 @@ const removeExtension = (filename) => {
     return filename === null || filename === void 0 ? void 0 : filename.split(".").slice(0, -1).join(".");
 };
 const storage = new multer_storage_cloudinary_1.CloudinaryStorage({
-    cloudinary: cloudinary_1.cloudinaryUpload,
+    cloudinary: cloudinary_1.cloudinary, // ✅ এখানে `cloudinary.v2` পাস করো
     params: {
         public_id: (_req, file) => Math.random().toString(36).substring(2) +
             "-" +

@@ -7,4 +7,6 @@ cloudinary.config({
   api_secret: config.cloudinary.cloudinary_api_secret,
 });
 
-export const cloudinaryUpload = cloudinary;
+// 🔴 ভুল: `export const cloudinaryUpload = cloudinary;`
+// ✅ ঠিক:
+export { cloudinary };

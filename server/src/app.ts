@@ -6,7 +6,12 @@ import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import cookieParser from "cookie-parser";
 
 const app: Application = express();
-app.use(cors());
+app.use(cors({
+  origin: ['https://chitchatclient-lusye7wj0-toukirdeveloperbdgmailcoms-projects.vercel.app'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 app.use(cookieParser());
 
 //parser
