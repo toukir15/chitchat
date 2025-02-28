@@ -26,6 +26,24 @@ const getMessages = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result,
     });
 }));
+const editMessage = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield message_service_1.MessageServices.editMessage(Number(req.params.message_id), req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Message edited successfully",
+        data: result,
+    });
+}));
+const deleteMessage = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield message_service_1.MessageServices.deleteMessage(Number(req.params.message_id));
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Message delete successfully",
+        data: result,
+    });
+}));
 const createMessage = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const customReq = req;
     const result = yield message_service_1.MessageServices.createMessage(req.body, req.params.room_id, customReq.user.id);
@@ -38,5 +56,7 @@ const createMessage = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
 }));
 exports.MessageControllers = {
     createMessage,
-    getMessages
+    getMessages,
+    editMessage,
+    deleteMessage
 };

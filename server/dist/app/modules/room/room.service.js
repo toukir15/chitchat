@@ -24,8 +24,9 @@ const createRoom = (req) => __awaiter(void 0, void 0, void 0, function* () {
         const room = yield prisma.room.create({
             data
         });
+        const roomUsers = [...req.body.roomUsers, req.user.id];
         // Create room users
-        const roomUsersPromises = req.body.roomUsers.map((userId) => __awaiter(void 0, void 0, void 0, function* () {
+        const roomUsersPromises = roomUsers.map((userId) => __awaiter(void 0, void 0, void 0, function* () {
             return prisma.roomUser.create({
                 data: {
                     roomId: room.id,
@@ -38,19 +39,63 @@ const createRoom = (req) => __awaiter(void 0, void 0, void 0, function* () {
     }));
     return transaction;
 });
-const joinRoom = (roomId, userId) => __awaiter(void 0, void 0, void 0, function* () {
-    yield prisma_1.default.roomUser.findFirstOrThrow({
+const editRoom = (req, id) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const editData = req.body;
+    if (req.file) {
+        editData.roomImage = (_a = req.file) === null || _a === void 0 ? void 0 : _a.path;
+    }
+    const result = yield prisma_1.default.room.update({
         where: {
-            AND: [
-                { roomId: Number(roomId) },
-                { userId: Number(userId) }
-            ]
-        }
+            id: id
+        },
+        data: editData
     });
+    return result;
+});
+const deleteRoom = (req, roomId) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.user.id;
+    const transaction = yield prisma_1.default.$transaction((prisma) => __awaiter(void 0, void 0, void 0, function* () {
+        yield prisma.roomUser.deleteMany({
+            where: {
+                roomId,
+                userId,
+            },
+        });
+        yield prisma.message.deleteMany({
+            where: {
+                roomId,
+            },
+        });
+        yield prisma.room.delete({
+            where: {
+                id: roomId,
+            },
+        });
+        return { success: true };
+    }));
+    return transaction;
+});
+const joinRoom = (roomId, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.roomUser.create({
         data: { roomId: Number(roomId), userId: Number(userId) }
     });
     return result;
+});
+const getJoinRoom = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const roomUsers = yield prisma_1.default.roomUser.findMany({
+        where: { userId },
+        select: { roomId: true }
+    });
+    const joinedRoomIds = roomUsers.map((roomUser) => roomUser.roomId);
+    const availableRooms = yield prisma_1.default.room.findMany({
+        where: {
+            id: {
+                notIn: joinedRoomIds
+            }
+        }
+    });
+    return availableRooms;
 });
 const getRooms = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     if (!userId)
@@ -79,5 +124,8 @@ const getRooms = (userId) => __awaiter(void 0, void 0, void 0, function* () {
 exports.RoomServices = {
     createRoom,
     getRooms,
-    joinRoom
+    joinRoom,
+    editRoom,
+    deleteRoom,
+    getJoinRoom
 };

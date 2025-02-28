@@ -10,4 +10,6 @@ const auth_1 = __importDefault(require("../../middlewares/auth"));
 const router = express_1.default.Router();
 router.get("/:room_id/messages", (0, auth_1.default)(), message_controller_1.MessageControllers.getMessages);
 router.post("/:room_id/messages", (0, auth_1.default)(), message_controller_1.MessageControllers.createMessage);
+router.patch("/:message_id", (0, auth_1.default)(), message_controller_1.MessageControllers.editMessage);
+router.delete("/:message_id", (0, auth_1.default)(), message_controller_1.MessageControllers.deleteMessage);
 exports.MessageRoutes = router;

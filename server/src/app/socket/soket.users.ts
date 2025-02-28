@@ -20,11 +20,7 @@ export const users = (socket: Socket) => {
         activeUsers.splice(index, 1);
       }
     });
-
     activeUsers.push({ id, socketId: socket.id });
-
-    console.log(activeUsers);
-
     socket.emit("online", activeUsers);
     socket.broadcast.emit("online", activeUsers);
   });

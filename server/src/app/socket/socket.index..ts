@@ -34,6 +34,18 @@ export function initializeSocket(server: HTTPServer): SocketIOServer {
       socket.to(findUser?.socketId as string).emit("conversation", data);
     });
 
+    socket.on("room", () => {
+      activeUsers.map(user => {
+        socket.to(user?.socketId as string).emit("room");
+      })
+    });
+
+    socket.on("updateMessage", (id) => {
+      activeUsers.map(user => {
+        socket.to(user?.socketId as string).emit("updateMessage", id);
+      })
+    });
+
     socket.on("typing", (data) => {
       const filterUsers = activeUsers.filter((user) => user.id != data.userId)
       filterUsers.map(user => {

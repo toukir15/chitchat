@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { multerUpload } from "../../../helpars/multerUpload";
 import { userController } from "./user.controller";
+import auth from "../../middlewares/auth";
 // import { userController } from "./user.controller";
 // import auth from "../../middlewares/auth";
 // import { UserRole } from "@prisma/client";
@@ -9,7 +10,7 @@ import { userController } from "./user.controller";
 
 const router = express.Router();
 
-router.get("/", userController.getUsers);
+router.get("/", auth(), userController.getUsers);
 
 router.post(
   "/",

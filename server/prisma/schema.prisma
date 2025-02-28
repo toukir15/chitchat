@@ -24,6 +24,8 @@ model User {
 
   messages  Message[]
   roomUsers RoomUser[]
+
+  @@map("user")
 }
 
 model Room {
@@ -35,6 +37,8 @@ model Room {
 
   messages  Message[]
   roomUsers RoomUser[]
+
+  @@map("room")
 }
 
 model Message {
@@ -47,6 +51,8 @@ model Message {
 
   room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("message")
 }
 
 model RoomUser {
@@ -60,4 +66,5 @@ model RoomUser {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([roomId, userId])
+  @@map("roomUser")
 }

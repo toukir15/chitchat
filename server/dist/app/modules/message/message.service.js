@@ -36,7 +36,26 @@ const createMessage = (data, roomId, userId) => __awaiter(void 0, void 0, void 0
     });
     return result;
 });
+const editMessage = (messageId, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.message.update({
+        where: {
+            id: messageId
+        },
+        data
+    });
+    return result;
+});
+const deleteMessage = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield prisma_1.default.message.delete({
+        where: {
+            id
+        },
+    });
+    return result;
+});
 exports.MessageServices = {
     createMessage,
-    getMessages
+    getMessages,
+    editMessage,
+    deleteMessage
 };

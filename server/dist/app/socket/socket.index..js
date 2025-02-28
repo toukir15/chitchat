@@ -29,6 +29,16 @@ function initializeSocket(server) {
             const findUser = (0, soket_users_1.getFindUser)(data.receiverId);
             socket.to(findUser === null || findUser === void 0 ? void 0 : findUser.socketId).emit("conversation", data);
         });
+        socket.on("room", () => {
+            soket_users_1.activeUsers.map(user => {
+                socket.to(user === null || user === void 0 ? void 0 : user.socketId).emit("room");
+            });
+        });
+        socket.on("updateMessage", (id) => {
+            soket_users_1.activeUsers.map(user => {
+                socket.to(user === null || user === void 0 ? void 0 : user.socketId).emit("updateMessage", id);
+            });
+        });
         socket.on("typing", (data) => {
             const filterUsers = soket_users_1.activeUsers.filter((user) => user.id != data.userId);
             filterUsers.map(user => {

@@ -17,42 +17,6 @@ const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
 const user_service_1 = require("./user.service");
-// const getUsers = catchAsync(async (req: Request, res: Response) => {
-//   const result = await userService.getUsers();
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Retrive users successfuly!",
-//     data: result,
-//   });
-// });
-// const getAdmins = catchAsync(async (req: Request, res: Response) => {
-//   const result = await userService.getAdmins();
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Retrive admins successfuly!",
-//     data: result,
-//   });
-// });
-// const getVendors = catchAsync(async (req: Request, res: Response) => {
-//   const result = await userService.getVendors();
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Retrive vendors successfuly!",
-//     data: result,
-//   });
-// });
-// const getCustomers = catchAsync(async (req: Request, res: Response) => {
-//   const result = await userService.getCustomers();
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Retrive customers successfuly!",
-//     data: result,
-//   });
-// });
 const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.userService.createUser(req);
     (0, sendResponse_1.default)(res, {
@@ -63,7 +27,8 @@ const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const getUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.userService.getUsers();
+    const customReq = req;
+    const result = yield user_service_1.userService.getUsers(customReq.user.id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -71,27 +36,6 @@ const getUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 
         data: result,
     });
 }));
-// const createCustomer = catchAsync(async (req: Request, res: Response) => {
-//   const result = await userService.createCustomer(req);
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Customer Created successfuly!",
-//     data: result,
-//   });
-// });
-// const updateStatus = catchAsync(async (req: Request, res: Response) => {
-//   const userId = req.params.userId;
-//   const newStatus = req.body.status;
-//   console.log(newStatus)
-//   const result = await userService.updateStatus(userId, newStatus);
-//   sendResponse(res, {
-//     statusCode: httpStatus.OK,
-//     success: true,
-//     message: "Update user status successfuly!",
-//     data: result,
-//   });
-// });
 exports.userController = {
     createUser,
     getUsers

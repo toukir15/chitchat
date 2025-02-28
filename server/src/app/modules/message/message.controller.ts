@@ -19,6 +19,26 @@ const getMessages = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const editMessage = catchAsync(async (req: Request, res: Response) => {
+  const result = await MessageServices.editMessage(Number(req.params.message_id), req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Message edited successfully",
+    data: result,
+  });
+});
+
+const deleteMessage = catchAsync(async (req: Request, res: Response) => {
+  const result = await MessageServices.deleteMessage(Number(req.params.message_id));
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Message delete successfully",
+    data: result,
+  });
+});
+
 const createMessage: RequestHandler<{ room_id: string }, any, any, any> = catchAsync(
   async (req, res) => {
     const customReq = req as CustomRequest;
@@ -38,5 +58,7 @@ const createMessage: RequestHandler<{ room_id: string }, any, any, any> = catchA
 
 export const MessageControllers = {
   createMessage,
-  getMessages
+  getMessages,
+  editMessage,
+  deleteMessage
 };

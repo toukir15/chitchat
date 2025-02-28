@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 
 const app: Application = express();
 app.use(cors({
-  origin: ['https://chitchatclient-lusye7wj0-toukirdeveloperbdgmailcoms-projects.vercel.app'],
+  origin: ['https://chitchatclient-lusye7wj0-toukirdeveloperbdgmailcoms-projects.vercel.app', 'http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));

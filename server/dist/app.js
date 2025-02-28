@@ -11,7 +11,7 @@ const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalEr
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: ['https://chitchatclient-lusye7wj0-toukirdeveloperbdgmailcoms-projects.vercel.app'],
+    origin: ['https://chitchatclient-lusye7wj0-toukirdeveloperbdgmailcoms-projects.vercel.app', 'http://localhost:3000'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));

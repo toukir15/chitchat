@@ -16,7 +16,6 @@ const users = (socket) => {
             }
         });
         exports.activeUsers.push({ id, socketId: socket.id });
-        console.log(exports.activeUsers);
         socket.emit("online", exports.activeUsers);
         socket.broadcast.emit("online", exports.activeUsers);
     });

@@ -12,6 +12,7 @@ router.get(
 
 router.post(
   "/",
+  auth(),
   multerUpload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
@@ -20,17 +21,36 @@ router.post(
   RoomController.createRoom
 );
 
+router.patch(
+  "/:roomId",
+  auth(),
+  multerUpload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    return RoomController.editRoom(req, res, next);
+  },
+  RoomController.editRoom
+);
+
+router.delete(
+  "/:roomId",
+  auth(),
+  RoomController.deleteRoom
+);
+
 router.post(
   "/:room_id/join",
   auth(),
   RoomController.joinRoom
 );
 
+router.get(
+  "/join",
+  auth(),
+  RoomController.getJoinRoom
+);
 
-// router.delete(
-//   "/:productId",
-//   auth(UserRole.VENDOR, UserRole.ADMIN),
-//   ProductController.deleteProduct
-// );
+
+
 
 export const RoomRoutes = router;

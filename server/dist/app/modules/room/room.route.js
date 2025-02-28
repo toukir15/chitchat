@@ -10,14 +10,15 @@ const multerUpload_1 = require("../../../helpars/multerUpload");
 const auth_1 = __importDefault(require("../../middlewares/auth"));
 const router = express_1.default.Router();
 router.get("/", (0, auth_1.default)(), room_controller_1.RoomController.getRooms);
-router.post("/", multerUpload_1.multerUpload.single("file"), (req, res, next) => {
+router.post("/", (0, auth_1.default)(), multerUpload_1.multerUpload.single("file"), (req, res, next) => {
     req.body = JSON.parse(req.body.data);
     return room_controller_1.RoomController.createRoom(req, res, next);
 }, room_controller_1.RoomController.createRoom);
+router.patch("/:roomId", (0, auth_1.default)(), multerUpload_1.multerUpload.single("file"), (req, res, next) => {
+    req.body = JSON.parse(req.body.data);
+    return room_controller_1.RoomController.editRoom(req, res, next);
+}, room_controller_1.RoomController.editRoom);
+router.delete("/:roomId", (0, auth_1.default)(), room_controller_1.RoomController.deleteRoom);
 router.post("/:room_id/join", (0, auth_1.default)(), room_controller_1.RoomController.joinRoom);
-// router.delete(
-//   "/:productId",
-//   auth(UserRole.VENDOR, UserRole.ADMIN),
-//   ProductController.deleteProduct
-// );
+router.get("/join", (0, auth_1.default)(), room_controller_1.RoomController.getJoinRoom);
 exports.RoomRoutes = router;

@@ -18,11 +18,32 @@ const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
 const room_service_1 = require("./room.service");
 const createRoom = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield room_service_1.RoomServices.createRoom(req);
+    const customReq = req;
+    const result = yield room_service_1.RoomServices.createRoom(customReq);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
         message: "Room create successfully!",
+        data: result,
+    });
+}));
+const editRoom = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const customReq = req;
+    const result = yield room_service_1.RoomServices.editRoom(customReq, Number(req.params.roomId));
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Room edited successfully!",
+        data: result,
+    });
+}));
+const deleteRoom = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const customReq = req;
+    const result = yield room_service_1.RoomServices.deleteRoom(customReq, Number(req.params.roomId));
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Room deleted successfully!",
         data: result,
     });
 }));
@@ -33,6 +54,16 @@ const joinRoom = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 
         statusCode: http_status_1.default.OK,
         success: true,
         message: "Room joined successfully!",
+        data: result,
+    });
+}));
+const getJoinRoom = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const customReq = req;
+    const result = yield room_service_1.RoomServices.getJoinRoom(customReq.user.id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Retive joined successfully!",
         data: result,
     });
 }));
@@ -49,5 +80,8 @@ const getRooms = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 
 exports.RoomController = {
     createRoom,
     getRooms,
-    joinRoom
+    joinRoom,
+    editRoom,
+    deleteRoom,
+    getJoinRoom
 };

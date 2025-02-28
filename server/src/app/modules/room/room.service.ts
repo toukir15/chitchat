@@ -1,8 +1,7 @@
-import { Request } from "express";
 import prisma from "../../../shared/prisma";
+import { CustomRequest } from "./room.controller";
 
-const createRoom = async (req: Request) => {
-
+const createRoom = async (req: CustomRequest) => {
   const data: { name: string, roomImage: any } = {
     name: req.body.roomData.name,
     roomImage: req.file?.path
@@ -13,8 +12,10 @@ const createRoom = async (req: Request) => {
       data
     });
 
+    const roomUsers = [...req.body.roomUsers, req.user.id]
+
     // Create room users
-    const roomUsersPromises = req.body.roomUsers.map(async (userId: any) => {
+    const roomUsersPromises = roomUsers.map(async (userId: any) => {
       return prisma.roomUser.create({
         data: {
           roomId: room.id,
@@ -31,21 +32,76 @@ const createRoom = async (req: Request) => {
   return transaction;
 };
 
-const joinRoom = async (roomId: string, userId: number) => {
-  await prisma.roomUser.findFirstOrThrow({
+const editRoom = async (req: CustomRequest, id: number) => {
+  const editData = req.body;
+  if (req.file) {
+    editData.roomImage = req.file?.path;
+  }
+  const result = await prisma.room.update({
     where: {
-      AND: [
-        { roomId: Number(roomId) },
-        { userId: Number(userId) }
-      ]
-    }
+      id: id
+    },
+    data: editData
+  });
+  return result;
+};
+
+const deleteRoom = async (req: CustomRequest, roomId: number) => {
+  const userId = req.user.id;
+
+  const transaction = await prisma.$transaction(async (prisma) => {
+    await prisma.roomUser.deleteMany({
+      where: {
+        roomId,
+        userId,
+      },
+    });
+
+    await prisma.message.deleteMany({
+      where: {
+        roomId,
+      },
+    });
+
+    await prisma.room.delete({
+      where: {
+        id: roomId,
+      },
+    });
+
+    return { success: true };
   });
 
+  return transaction;
+};
+
+
+const joinRoom = async (roomId: string, userId: number) => {
   const result = await prisma.roomUser.create({
     data: { roomId: Number(roomId), userId: Number(userId) }
   })
   return result
 };
+
+const getJoinRoom = async (userId: number) => {
+  const roomUsers = await prisma.roomUser.findMany({
+    where: { userId },
+    select: { roomId: true }
+  });
+
+  const joinedRoomIds = roomUsers.map((roomUser) => roomUser.roomId);
+
+  const availableRooms = await prisma.room.findMany({
+    where: {
+      id: {
+        notIn: joinedRoomIds
+      }
+    }
+  });
+
+  return availableRooms;
+};
+
 
 const getRooms = async (userId: number) => {
   if (!userId) return;
@@ -78,10 +134,11 @@ const getRooms = async (userId: number) => {
   return findRoomUser;
 };
 
-
-
 export const RoomServices = {
   createRoom,
   getRooms,
-  joinRoom
+  joinRoom,
+  editRoom,
+  deleteRoom,
+  getJoinRoom
 };
